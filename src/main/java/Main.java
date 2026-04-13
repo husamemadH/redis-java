@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,10 +21,15 @@ public class Main {
           serverSocket.setReuseAddress(true);
         // Wait for connection from client.
           clientSocket = serverSocket.accept();
+        InputStream input = clientSocket.getInputStream();
+        OutputStream output = clientSocket.getOutputStream();
+        byte[] buffer = new byte[1024];
+        while(true) {
+          
+          int bytesRead = input.read(buffer);
 
-          OutputStream outputStream = clientSocket.getOutputStream();
-          outputStream.write("+PONG\r\n".getBytes());  
-          outputStream.flush();
+          output.write("+PONG\r\n".getBytes());
+        }
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } finally {
